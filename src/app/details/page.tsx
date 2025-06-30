@@ -9,7 +9,7 @@ import Link from 'next/link';
 export default function CountryDetails() {
   const [isLoading, setIsLoading] = useState<Boolean>(true);
   const [countryData, setCountryData] = useState<FullCountry | null>(null);
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
 
   const countryCode = searchParams.get('countryCode')
 
@@ -28,7 +28,7 @@ export default function CountryDetails() {
 
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [countryCode]);
 
   const formatLaguages = (languages: Languages) => {
     const valuesArray = Object.values(languages);
