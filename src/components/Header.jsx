@@ -1,59 +1,49 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
+import { useTheme } from 'next-themes';
 
 const Header = () => {
-
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { systemTheme, theme, setTheme } = useTheme();
 
   useEffect(() => {
-    // const html = document.documentElement;
     if (typeof window !== 'undefined') {
       const savedMode = localStorage.getItem('theme');
-      if (savedMode === 'dark') {
-        setIsDarkMode(true);
-        // html.classList.add('dark');
+      if (savedMode) {
+        setTheme(savedMode);
       } else {
-        setIsDarkMode(false);
-        // html.classList.remove('dark');
+        setTheme(theme === 'system' ? systemTheme : theme);
+        localStorage.setItem('theme', theme);
       }
     }
   }, []);
 
   useEffect(() => {
-    // const html = document.documentElement;
-    if (isDarkMode) {
-      // html.classList.add('dark');
-    } else {
-      // html.classList.remove('dark');
-    }
-    // Solo guardar en localStorage si estamos en el cliente
     if (typeof window !== 'undefined') {
-      localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+      localStorage.setItem('theme', theme);
     }
-  }, [isDarkMode]);
+  }, [theme]);
 
 
   const toggleDarkMode = () => {
-    setIsDarkMode(prevMode => !prevMode);
+    setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full p-4 shadow-md rounded-b-lg z-50
-      bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-colors duration-300">
+    <header className="w-full p-4 shadow-md transition-colors duration-300" style={{ backgroundColor: 'var(--background-elements)', color: 'var(--color)' }}>
       <div className="container mx-auto flex justify-between items-center">
-        <Link href="/" className="text-xl md:text-2xl font-bold rounded-lg p-2">
+        <Link href="/" className="text-xl md:text-2xl font-bold p-2">
           Where in the world?
         </Link>
 
         <button
           onClick={toggleDarkMode}
-          className="flex items-center space-x-2 p-2 rounded-lg
-            hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex items-center p-2 rounded-lg cursor-pointer
+            hover:text-gray-700 dark:hover:text-gray-300 transition-colors duration-200 focus:outline-none"
         >
-          <i className={"fa-moon " + (isDarkMode ? 'fa-solid' : 'fa-regular')} suppressHydrationWarning></i>
+          <i className={"mr-3 fa-moon " + (theme === 'dark' ? 'fa-solid' : 'fa-regular')} suppressHydrationWarning></i>
           <span className="font-semibold text-sm md:text-base">
-            {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+            {theme === 'light' ? 'Light Mode' : 'Dark Mode'}
           </span>
         </button>
       </div>

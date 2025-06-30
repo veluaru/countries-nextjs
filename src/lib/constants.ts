@@ -1,0 +1,1 @@
+export const reducedCountryRequiredFields: Array<string> = ['name', 'population', 'region', 'capital', 'ccn3', 'flags'];

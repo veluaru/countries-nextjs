@@ -1,21 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "../components/Header.jsx"
+import { ThemeProvider } from "next-themes";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const NunitoSans = Nunito_Sans({
+  variable: "--font-nunito-sans",
   subsets: ["latin"],
+  weight: ['300','600','800']
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
-  title: "Country info with Next.Js",
-  description: "An app to get countries information",
+  title: "Country information",
+  description: "An app to get countries information with Next Js",
 };
 
 export default function RootLayout({
@@ -24,16 +22,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
-        <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
         <script src="https://kit.fontawesome.com/bef1951ca5.js" crossOrigin="anonymous"></script>
       </head>
       <body
-        className={`flex flex-col ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`h-screen flex flex-col ${NunitoSans.className} antialiased`}
       >
-        <Header />
-        {children}
+        <ThemeProvider attribute="class" enableSystem defaultTheme="system">
+          <Header />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
