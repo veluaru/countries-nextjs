@@ -425,6 +425,10 @@
     overflow: hidden;
   }
 
+  .static {
+    position: static;
+  }
+
   .container {
     width: 100%;
   }
@@ -557,6 +561,10 @@
 
   .justify-between {
     justify-content: space-between;
+  }
+
+  .justify-center {
+    justify-content: center;
   }
 
   .gap-2 {

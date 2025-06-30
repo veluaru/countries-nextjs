@@ -85,7 +85,9 @@ function CountryDetails() {
         "CountryDetails.useEffect": ()=>{
             fetchPosts();
         }
-    }["CountryDetails.useEffect"], []);
+    }["CountryDetails.useEffect"], [
+        countryCode
+    ]);
     const formatLaguages = (languages)=>{
         const valuesArray = Object.values(languages);
         return valuesArray.join(', ');
