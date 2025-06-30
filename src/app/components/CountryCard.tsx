@@ -4,9 +4,6 @@ import Link from 'next/link';
 import { ReducedCountry } from '@/types/country';
 
 const CountryCard = ({ countryData }: { countryData: ReducedCountry }) => {
-
-  // const goToProductDetails = () => { }
-  
   return (
     <Link href={{ pathname: '/details', query: { countryCode: countryData.ccn3 }, }} className='flex flex-col rounded-sm shadow-md hover:scale-102 duration-300 ease-in-out'
       style={{

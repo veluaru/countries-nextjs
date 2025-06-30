@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import { regionOptions } from '@/lib/constants';
 
 interface ChildProps {
   onKeyDownSearchText: (data: string) => void;
@@ -9,15 +10,6 @@ interface ChildProps {
 const CountryFilters: React.FC<ChildProps> = ({ onKeyDownSearchText, onRegionSelect }) => {
   const [searchText, setSearchText] = useState<string>('');
   const [selectedRegion, setSelectedRegion] = useState('');
-
-  const regionOptions = [
-    { value: 'africa', label: 'Africa' },
-    { value: 'americas', label: 'Americas' },
-    { value: 'asia', label: 'Asia' },
-    { value: 'europe', label: 'Europe' },
-    { value: 'oceania', label: 'Oceania' },
-    { value: '', label: 'All' },
-  ];
 
   const handleSearchTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(event.target.value)
