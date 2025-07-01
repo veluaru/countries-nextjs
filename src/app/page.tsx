@@ -60,11 +60,9 @@ export default function Home() {
         try {
           setIsLoading(true);
           const response = await axios.get(`https://restcountries.com/v3.1/name/${text}?fields=${reducedCountryRequiredFields.toString()}`);
-          // setCountriesData(response.data);
           setAllCountriesData(response.data);
           setAllCountriesDataFiltered(response.data)
         } catch (error) {
-          // setCountriesData([]);
           setAllCountriesData([]);
           setAllCountriesDataFiltered([])
           console.error('Error fetching data:', error);
@@ -105,7 +103,6 @@ export default function Home() {
           <CountryCard key={country.ccn3} countryData={country} />))}
         {!isLoading && countriesData.length == 0 && <div>No countries found, please try again</div>}
       </div>
-      {currentPage}
       <ReactPaginate
         breakLabel="..."
         nextLabel="Next >"
