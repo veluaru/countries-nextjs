@@ -34,7 +34,7 @@ const CountryFilters: React.FC<ChildProps> = ({ onKeyDownSearchText, onRegionSel
           backgroundColor: 'var(--background-elements)',
         }}
       >
-        <i className="fa-solid fa-magnifying-glass mr-5" style={{ color: 'var(--input)' }}></i>
+        <i className="fa-solid fa-magnifying-glass mr-5" style={{ color: 'var(--input)' }} suppressHydrationWarning></i>
         <input
           type="text"
           placeholder='Search for a country'
