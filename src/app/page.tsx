@@ -5,39 +5,31 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import CountryFilters from './components/CountryFilters';
 import ReactPaginate from 'react-paginate';
 import { ReducedCountry } from '@/types/country';
-import { reducedCountryRequiredFields } from '@/lib/constants';
-import axios from 'axios';
+import { useCountryStore } from '../stores/countryStore';
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState<Boolean>(true);
   const [countriesData, setCountriesData] = useState<ReducedCountry[]>([]);
-  const [allCountriesData, setAllCountriesData] = useState<ReducedCountry[]>([]);
   const [allCountriesDataFiltered, setAllCountriesDataFiltered] = useState<ReducedCountry[]>([]);
-
+  const [isFirstFetch, setIsFirstFetch] = useState<Boolean>(false);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [pageCount, setPageCount] = useState<number>(0);
-
-  async function fetchPosts() {
-    try {
-      setIsLoading(true);
-      const response = await axios.get(`https://restcountries.com/v3.1/all?fields=${reducedCountryRequiredFields.toString()}`);
-      setCountriesData(response.data);
-      setAllCountriesData(response.data);
-      setAllCountriesDataFiltered(response.data)
-    } catch (error) {
-      setCountriesData([]);
-      setAllCountriesData([]);
-      setAllCountriesDataFiltered([]);
-      console.error('Error fetching data:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  const { allCountries, isLoading, error, fetchCountries, fetchCountriesByName, clearCountries } = useCountryStore();
 
   useEffect(() => {
-    fetchPosts();
+    fetchCountries();
   }, []);
+
+  useEffect(() => {
+    if (error === null) {
+      setAllCountriesDataFiltered(allCountries);
+    } else {
+      setCountriesData([]);
+      setAllCountriesDataFiltered([]);
+      console.error('Error fetching data:', error);
+    }
+    setIsFirstFetch(true);
+  }, [allCountries]);
 
 
   useEffect(() => {
@@ -54,24 +46,13 @@ export default function Home() {
   }, [currentPage, allCountriesDataFiltered, itemsPerPage]);
 
 
-  const handleKeyDownSearchText = async (text: string) => {
+  const handleKeyDownSearchText = (text: string) => {
     if (!isLoading) {
       if (text) {
-        try {
-          setIsLoading(true);
-          const response = await axios.get(`https://restcountries.com/v3.1/name/${text}?fields=${reducedCountryRequiredFields.toString()}`);
-          setAllCountriesData(response.data);
-          setAllCountriesDataFiltered(response.data)
-        } catch (error) {
-          setAllCountriesData([]);
-          setAllCountriesDataFiltered([])
-          console.error('Error fetching data:', error);
-        } finally {
-          setIsLoading(false);
-        }
+        fetchCountriesByName(text);
       }
       else {
-        fetchPosts()
+        fetchCountries();
       }
     }
   }
@@ -79,9 +60,9 @@ export default function Home() {
   const handleRegionSelect = (region: string) => {
     let filtered: ReducedCountry[];
     if (region) {
-      filtered = allCountriesData.filter((country) => country.region.toLocaleLowerCase() === region.toLocaleLowerCase());
+      filtered = allCountries.filter((country) => country.region.toLocaleLowerCase() === region.toLocaleLowerCase());
     } else {
-      filtered = allCountriesData;
+      filtered = allCountries;
     }
     setAllCountriesDataFiltered(filtered);
   };
@@ -98,12 +79,12 @@ export default function Home() {
     <main className="h-full overflow-y-scroll transition-colors duration-300 text-sm">
       <CountryFilters onKeyDownSearchText={handleKeyDownSearchText} onRegionSelect={handleRegionSelect} />
       <div className="container mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {isLoading && <LoadingSpinner />}
-        {!isLoading && countriesData.length > 0 && countriesData.map((country) => (
+        {(isLoading || !isFirstFetch) && <LoadingSpinner />}
+        {!isLoading &&  isFirstFetch && countriesData.length > 0 && countriesData.map((country) => (
           <CountryCard key={country.ccn3} countryData={country} />))}
-        {!isLoading && countriesData.length == 0 && <div>No countries found, please try again</div>}
+        {!isLoading && isFirstFetch && countriesData.length == 0 && <div>No countries found, please try again</div>}
       </div>
-      <ReactPaginate
+      {!isLoading && countriesData.length > 0 && <ReactPaginate
         breakLabel="..."
         nextLabel="Next >"
         onPageChange={handlePageClick}
@@ -119,7 +100,7 @@ export default function Home() {
         nextLinkClassName="px-4 py-2 rounded-lg bg-emerald-400 text-white font-semibold hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
         breakLinkClassName="px-3 py-1 rounded-lg font-semibold text-gray-400"
         disabledLinkClassName="opacity-50 cursor-not-allowed"
-      />
+      />}
     </main>
   );
 }
