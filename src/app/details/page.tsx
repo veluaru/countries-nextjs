@@ -13,7 +13,6 @@ export default function CountryDetails() {
       <Suspense fallback={<SearchBarFallback />}>
         <CountryInfo />
       </Suspense>
-
     </>
   );
 }

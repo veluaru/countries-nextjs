@@ -12,7 +12,7 @@ export default function CountryInfo() {
   const [countryData, setCountryData] = useState<FullCountry | null>(null);
   const searchParams = useSearchParams();
 
-  const countryCode = searchParams.get('countryCode')
+  const countryCode = searchParams.get('countryCode');
 
   async function fetchPosts() {
     try {
