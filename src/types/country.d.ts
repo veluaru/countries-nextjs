@@ -44,7 +44,7 @@ interface Currencies {
 interface FullCountry {
   altSpellings: Array<string>;
   area: number;
-  borders: Array<string>;
+  borders: Array<Any>;
   capital: Array<string>;
   capitalInfo: Object;
   car: Object;

@@ -1,7 +1,7 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Languages, Currencies, NativeName } from '@/types/country';
+import { Languages, Currencies, NativeName, FullCountry } from '@/types/country';
 import { useCountryStore } from '../../../stores/countryStore';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import Link from 'next/link';
@@ -10,11 +10,19 @@ import Link from 'next/link';
 export default function CountryInfo() {
   const searchParams = useSearchParams();
   const countryCode = searchParams.get('countryCode');
-  const { countryDetails, isLoading, fetchCountryByCode } = useCountryStore();
+  const { countryDetails, isLoading, fetchCountryByCode, fetchCountriesByCode } = useCountryStore();
 
   useEffect(() => {
-    fetchCountryByCode(countryCode);
+    if (countryCode) {
+      fetchCountryByCode(countryCode);
+    }
   }, [countryCode]);
+
+  // useEffect(() => {
+  //   if (countryDetails?.borders && countryDetails?.borders.length > 0) {
+  //     fetchCountriesByCode(countryDetails.borders);
+  //   }
+  // }, [countryDetails]);
 
   const formatLaguages = (languages: Languages) => {
     const valuesArray = Object.values(languages);
@@ -63,14 +71,14 @@ export default function CountryInfo() {
                 <div><span className='font-semibold'>Languages:</span> <span className='font-light'>{formatLaguages(countryDetails.languages)}</span></div>
               </div>
             </div>
-            {countryDetails.borders && <div className='flex flex-row items-center mt-20'>
+            {countryDetails.borders && <div className='flex flex-row flex-wrap gap-2 items-center mt-20'>
               <span className='font-semibold mr-5'>Border Countries:</span>
               {countryDetails.borders.map((border) => (
-                <div className='flex flex-row flex-wrap mr-2 px-4 py-1 w-min rounded-sm shadow-sm' style={{
+                <Link href={{ pathname: '/details', query: { countryCode: border.ccn3 }, }} className='flex flex-row flex-wrap mr-2 px-4 py-1 w-min rounded-sm shadow-sm' style={{
                   backgroundColor: 'var(--background-elements)'
-                }} key={border}>
-                  <div className='font-light'>{border}</div>
-                </div>))}
+                }} key={border.ccn3}>
+                  <div className='font-light'>{border.name.common}</div>
+                </Link>))}
 
             </div>}
           </div>

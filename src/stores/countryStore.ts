@@ -14,6 +14,7 @@ interface CountryState {
 	fetchCountries: () => Promise<void>;
 	fetchCountriesByName: (term: string) => Promise<void>;
 	fetchCountryByCode: (code: string | null) => Promise<void>;
+	fetchCountriesByCode: (code: string[] | null) => Promise<FullCountry[] | null>;
 	clearCountries: () => void;
 }
 
@@ -53,15 +54,37 @@ export const useCountryStore = create<CountryState>()(
 			fetchCountryByCode: async (code: string | null) => {
 				set({ isLoading: true, error: null });
 				try {
-					console.log(code)
 					const response = await axios.get<FullCountry[]>(`${API_URL}/alpha/${code}`);
-					set({ countryDetails: response.data[0], isLoading: false });
+					const country = response.data[0];
+                    if (country.borders && country.borders.length > 0) {
+                        const borderCountriesData = await get().fetchCountriesByCode(country.borders);
+                        if (borderCountriesData) {
+                            country.borders = borderCountriesData;
+                        } else {
+                            country.borders = [];
+                        }
+                    }
+					set({ countryDetails: country, isLoading: false });
 				} catch (err) {
 					if (axios.isAxiosError(err)) {
 						set({ error: err.message, isLoading: false, countryDetails: null });
 					} else {
 						set({ error: 'An unexpected error occurred', isLoading: false, countryDetails: null });
 					}
+				}
+			},
+			fetchCountriesByCode: async (codes: string[] | null) => {
+				set({ isLoading: true, error: null });
+				try {
+					const response = await axios.get<FullCountry[]>(`${API_URL}/alpha?codes=${codes?.join(',')}`);
+					return response.data;
+				} catch (err) {
+					if (axios.isAxiosError(err)) {
+						set({ isLoading: false , error: err.message });
+					} else {
+						set({ isLoading: false , error: 'An unexpected error occurred' });
+					}
+					return null;
 				}
 			},
 			clearCountries: () => set({ allCountries: [], countryDetails: null }),

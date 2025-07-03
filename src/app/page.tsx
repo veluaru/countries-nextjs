@@ -94,10 +94,10 @@ export default function Home() {
         renderOnZeroPageCount={null}
         forcePage={currentPage}
         containerClassName="flex justify-center items-center space-x-2 mt-8 mb-8"
-        pageLinkClassName="px-3 py-1 rounded-lg font-semibold text-gray-400 transition-colors duration-200 hover:text-white bg-[var(--background-elements)] dark:bg-[var(--background-elements)] hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer shadow-sm"
+        pageLinkClassName="px-3 py-1 rounded-lg font-semibold text-gray-400 transition-colors duration-200 hover:text-white bg-[var(--background-elements)] dark:bg-[var(--background-elements)] hover:bg-gray-300 dark:hover:bg-gray-600 hover:cursor-pointer shadow-sm"
         activeLinkClassName="!bg-emerald-400 !text-white"
-        previousLinkClassName="px-4 py-2 rounded-lg bg-emerald-400 text-white font-semibold hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-        nextLinkClassName="px-4 py-2 rounded-lg bg-emerald-400 text-white font-semibold hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+        previousLinkClassName="px-4 py-2 rounded-lg bg-emerald-400 text-white font-semibold hover:bg-emerald-500 disabled:opacity-50 transition-colors duration-200"
+        nextLinkClassName="px-4 py-2 rounded-lg bg-emerald-400 text-white font-semibold hover:bg-emerald-500 disabled:opacity-50 transition-colors duration-200"
         breakLinkClassName="px-3 py-1 rounded-lg font-semibold text-gray-400"
         disabledLinkClassName="opacity-50 cursor-not-allowed"
       />}
