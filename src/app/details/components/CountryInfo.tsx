@@ -1,7 +1,7 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Languages, Currencies, NativeName, FullCountry } from '@/types/country';
+import { Languages, Currencies, NativeName } from '@/types/country';
 import { useCountryStore } from '../../../stores/countryStore';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import Link from 'next/link';
@@ -10,19 +10,13 @@ import Link from 'next/link';
 export default function CountryInfo() {
   const searchParams = useSearchParams();
   const countryCode = searchParams.get('countryCode');
-  const { countryDetails, isLoading, fetchCountryByCode, fetchCountriesByCode } = useCountryStore();
+  const { countryDetails, isLoading, fetchCountryByCode } = useCountryStore();
 
   useEffect(() => {
     if (countryCode) {
       fetchCountryByCode(countryCode);
     }
   }, [countryCode]);
-
-  // useEffect(() => {
-  //   if (countryDetails?.borders && countryDetails?.borders.length > 0) {
-  //     fetchCountriesByCode(countryDetails.borders);
-  //   }
-  // }, [countryDetails]);
 
   const formatLaguages = (languages: Languages) => {
     const valuesArray = Object.values(languages);
