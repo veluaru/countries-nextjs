@@ -5,7 +5,6 @@ export interface Flags {
 }
 
 export interface ReducedCountry {
-  id: string,
   name: CountryName;
   population: number;
   region: string;
